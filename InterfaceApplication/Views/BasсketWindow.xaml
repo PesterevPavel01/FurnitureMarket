@@ -1,0 +1,42 @@
+﻿<Window x:Class="InterfaceApplication.Views.BasсketWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InterfaceApplication.Views" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        xmlns:viewmodels="clr-namespace:InterfaceApplication.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:CategoryViewModel}"
+        Title="BasketWindow" Height="450" Width="800" Background="#DED09F">
+
+    <Grid>
+        <ListBox ItemsSource="{Binding Items}"  x:Name="ListProd"  
+   Margin="2,0,2,61" RenderTransformOrigin="0.563,0.504" Background="#FFF9CC59">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Выбранный элемент"  />
+                        <TextBlock FontWeight="Bold" Text="Модель" />
+                        <TextBlock Text="{Binding NameProduct}" />
+                        <TextBlock FontWeight="Bold" Text="Количество" />
+                        <TextBlock Text="{Binding Number}" />
+                        <TextBlock FontWeight="Bold" Text="Цена" />
+                        <TextBlock Text="{Binding Sum}" />
+                        <TextBlock FontWeight="Bold" Text="Время и дата покупки"/>
+                        <TextBlock Text="{Binding Date }" />
+                        
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChangedProduct">
+                    <i:InvokeCommandAction Command="{Binding CurrentProductBuyCommand}" 
+                  CommandParameter="{Binding ElementName=Products}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListBox>
+        <StackPanel Height="56" VerticalAlignment="Top" Margin="2,378,0,0">
+            <Button Command="{Binding ClearCommand}" Content="очистить" Background="#FFF9CC59" Height="23" RenderTransformOrigin="0.5,0.5" Width="256"   />
+        </StackPanel>
+    </Grid>
+</Window>

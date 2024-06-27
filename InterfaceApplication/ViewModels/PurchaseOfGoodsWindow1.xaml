@@ -1,0 +1,28 @@
+﻿<Window x:Class="InterfaceApplication.ViewModels.PurchaseOfGoodsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InterfaceApplication.ViewModels"
+        mc:Ignorable="d"
+        Title="PurchaseOfGoodsWindow1" Height="450" Width="400">
+    <Grid HorizontalAlignment="Right" Width="400">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="279*"/>
+            <ColumnDefinition Width="521*"/>
+        </Grid.ColumnDefinitions>
+        <ComboBox  x:Name="ComboBox" DataContext="{Binding SelectedCategory}"  ItemsSource="{Binding NameCategory}" Margin="10,7,9,369" Grid.ColumnSpan="2" HorizontalContentAlignment="Stretch" />
+        <ListBox ItemsSource="{Binding Products}"
+    SelectedItem="{Binding SelectedProduct}" Margin="6,51,8,1" RenderTransformOrigin="0.563,0.504" Grid.ColumnSpan="2">
+            <ListBox.ItemTemplate >
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Width="100" Height="24" ></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</Window>
+

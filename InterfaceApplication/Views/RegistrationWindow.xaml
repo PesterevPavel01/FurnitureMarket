@@ -1,0 +1,33 @@
+﻿<Window x:Class="InterfaceApplication.RegistrationWindow"
+        x:Name="RegWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InterfaceApplication"
+        xmlns:viewmodels="clr-namespace:InterfaceApplication.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:EmployeeViewModel}"
+        mc:Ignorable="d"
+        Title="AutoRegWindow" Height="442" Width="442" Background="#DED09F">
+
+    <Grid Margin="3,8,0,0" RenderTransformOrigin="0.608,0.506" HorizontalAlignment="Left" Width="426" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="63*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border MinWidth="400"  Background="#FFF9CC59" Margin="15,0,0,0"  VerticalAlignment="Center" Padding="40" MaxWidth="650" CornerRadius="10" Height="376" HorizontalAlignment="Left" Width="369" Grid.ColumnSpan="2">
+
+            <StackPanel Margin="0,-6,0,-11" DataContext="{Binding SelectedEmployee }" >
+                <TextBlock FontSize="22" FontWeight="Bold" Margin="0,0,0,20" Height="34" ><Run Language="ru-ru" Text="Введите Данные" /></TextBlock>
+                <TextBlock Text="Логин"/>
+                <TextBox  x:Name="LoginBoxAuto" Text="{Binding Login}"/>
+                <TextBlock Text="пароль"/>
+                <TextBox x:Name="PasswordBoxAuto" Text="{Binding Password}"/>
+            </StackPanel>
+        </Border>
+        <StackPanel Height="101" VerticalAlignment="Top" Margin="8,199,52,0" Grid.Column="1">
+            <Button Command="{Binding AutorizationCommand}"  Background="#DED09F" CommandParameter="{Binding ElementName=RegWindow}"  x:Name="updateButton" Content="Войти" Height="43" Width="316"/>
+        </StackPanel>
+    </Grid>
+</Window>

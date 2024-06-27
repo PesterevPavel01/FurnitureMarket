@@ -1,0 +1,32 @@
+﻿<Window x:Class="InterfaceApplication.AutorizationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InterfaceApplication"
+        xmlns:viewmodels="clr-namespace:InterfaceApplication.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:EmployeeViewModel}"
+        mc:Ignorable="d"
+        Title="Employee" Height="450" Width="438" Background="#DED09F">
+
+    <Grid Margin="3,8,0,19" RenderTransformOrigin="0.608,0.506" HorizontalAlignment="Left" Width="440"  >
+
+        <Border MinWidth="400" Margin="15,0,0,0" Background="#FFF9CC59" VerticalAlignment="Center" Padding="40" MaxWidth="650" CornerRadius="10" Height="382" HorizontalAlignment="Left" Width="322">
+            <StackPanel Margin="0,-6,0,-11" DataContext="{Binding SelectedEmployee }" >
+                <TextBlock FontSize="22" FontWeight="Bold" Margin="0,0,0,20" Height="34" ><Run Language="ru-ru" Text="Введите Данные" /></TextBlock>
+                <TextBlock Text="Имя" x:Name="EmplNameBox" />
+                <TextBox Text="{Binding NameEmployee}" x:Name="NameBox1">
+                </TextBox>
+                <TextBlock Text="Адрес"/>
+                <TextBox  Text="{Binding Address}" x:Name ="AddressBox"/>
+                <TextBlock Text="Логин"/>
+                <TextBox Text="{Binding Login}" x:Name="Loginbox"/>
+                <TextBlock Text="пароль"/>
+                <TextBox Text="{Binding Password}" x:Name="Passwordbox" />
+            </StackPanel>
+        </Border>
+        <StackPanel Height="38" VerticalAlignment="Top" Margin="56,262,64,0">
+            <Button Command="{Binding AddEmployeeCommand}" Background="#FFE5E095" x:Name="updateButton" Content="зарегистрироваться" Height="35" Click="updateButton_Click_1"/>
+        </StackPanel>
+    </Grid>
+</Window>
