@@ -5,14 +5,20 @@ using InterfaceApplication.Models.Dto;
 using InterfaceApplication.Services.Api;
 using InterfaceApplication.Views;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using Ис_Мебельного_магазина.Domain.Models;
 
 namespace InterfaceApplication.ViewModels
 {
     public partial class CategoryViewModel : ObservableObject
     {
+
+        Task _currentTasck;
+        CancellationToken _token;
+        CancellationTokenSource _cancelTokenSource;
 
         private readonly EmployeeViewModel employeeViewModel;
 
@@ -266,5 +272,47 @@ namespace InterfaceApplication.ViewModels
             }
         }
         #endregion
+
+        [RelayCommand]
+
+        private async Task CreatePriceListAsync(Button button)
+        {
+            //string baseDir = Environment.CurrentDirectory;
+            Price_list price_list = new();
+
+            var products = await _productService.GetAllAsync();
+
+            string[,] data = new string[products.Count, 2];
+
+            int row = 0;
+
+            foreach (var product in products)
+            {
+                data[row, 0] = product.Name;
+                data[row, 1] = product.Price;
+                row++;
+            }
+
+            if (_currentTasck != null)
+                _cancelTokenSource.Cancel();
+
+            _cancelTokenSource = new CancellationTokenSource();
+            _token = _cancelTokenSource.Token;
+
+            button.Visibility = Visibility.Hidden;
+
+            _currentTasck = Task.Run(async () =>
+            {
+                price_list.CreateExcellDocument("B:\\Яндекс\\Саня\\Template.xlsx", data, "priceList");
+                UpdateData(button);
+
+            }, _token);
+
+        }
+
+        private void UpdateData(Button button)
+        {
+            Application.Current.Dispatcher.BeginInvoke(() => button.Visibility = Visibility.Visible);
+        }
     }
 }
