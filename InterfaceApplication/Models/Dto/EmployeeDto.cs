@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ис_Мебельного_магазина.Domain.Models;
 
 namespace InterfaceApplication.Models.Dto
 {
     public class EmployeeDto
     {
-        public int Id { get; set; }
+        public short Id { get; set; }
         public string NameEmployee { get; set; }
         public string Address { get; set; }
         public string Login { get; set; }
@@ -17,7 +18,7 @@ namespace InterfaceApplication.Models.Dto
 
         public EmployeeDto() { }
 
-        public EmployeeDto(int id, string name, string address, string login, string password, string status) 
+        public EmployeeDto(short id, string name, string address, string login, string password, string status) 
         {
             Id = id;
             NameEmployee = name;
@@ -26,5 +27,6 @@ namespace InterfaceApplication.Models.Dto
             Password = password;
             Status = status;
         }
+
     }
 }

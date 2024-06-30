@@ -1,11 +1,7 @@
-﻿using System.Configuration;
-using System.Windows;
-using InterfaceApplication.ViewModels;
-using Microsoft.EntityFrameworkCore;
+﻿using InterfaceApplication.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Ис_Мебельного_магазина;
-using Ис_Мебельного_магазина.DependencyInjection;
+using System.Windows;
 
 namespace InterfaceApplication
 {
@@ -19,11 +15,9 @@ namespace InterfaceApplication
         public App()
         {
             var builder = Host.CreateDefaultBuilder();
-            string ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
 
             builder.ConfigureServices((context, services) =>
             {
-                services.AddDataAccessLayer(ConnectionString);
                 services.AddSingleton<MainWindow> ();
                 services.AddSingleton<CategoryViewModel>();
             }

@@ -9,11 +9,11 @@ namespace InterfaceApplication.ViewModels
 {
     public partial class PurchaseOfGoodaViewModel
     {
-        private PurchaseOfGoodsIteractor goodsIteractor;
-        private ApplicationDbContext dbContext;
-        private PurchaseOfGoods? NewPurchase;
+        /*private PurchaseOfGoodsIteractor goodsIteractor;
 
-        public PurchaseOfGoods? SelectedPurchase
+        private Purchase? NewPurchase;
+
+        public Purchase? SelectedPurchase
         {
             get { return NewPurchase; }
             set
@@ -23,11 +23,10 @@ namespace InterfaceApplication.ViewModels
         }
 
 
-        public PurchaseOfGoodaViewModel(ApplicationDbContext dbContext)
+        public PurchaseOfGoodaViewModel()
         {
-            this.dbContext = dbContext;
-            this.goodsIteractor = new PurchaseOfGoodsIteractor(dbContext);
-            SelectedPurchase = new PurchaseOfGoods();
+            //this.goodsIteractor = new PurchaseOfGoodsIteractor(dbContext);
+            SelectedPurchase = new Purchase();
         }
 
 
@@ -50,14 +49,7 @@ namespace InterfaceApplication.ViewModels
                 MessageBox.Show("продукт добавлен");
             }
 
-        }
+        }*/
 
-        //[RelayCommand]
-
-        //private void Add(Window autorWindow)
-        //{
-
-
-        //}
     }
 }

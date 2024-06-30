@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using InterfaceApplication.Models.Dto;
+using InterfaceApplication.Services.Api;
 using Microsoft.IdentityModel.Tokens;
 using System.Windows;
-using Ис_Мебельного_магазина;
-using Ис_Мебельного_магазина.Domain.Interactors;
-using Ис_Мебельного_магазина.Domain.Models;
 
 namespace InterfaceApplication.ViewModels
 {
@@ -13,10 +12,8 @@ namespace InterfaceApplication.ViewModels
 
         #region Category
 
-        private CategoryInteractor CInteractor;
-
-        public Category? selectedCategory;
-        public Category? SelectedCategory
+        public CategoryDto? selectedCategory;
+        public CategoryDto? SelectedCategory
         {
             get { return selectedCategory; }
             set
@@ -25,8 +22,8 @@ namespace InterfaceApplication.ViewModels
             }
         }
 
-        private List<Category> categories;
-        public List<Category> Categories
+        private List<CategoryDto> categories;
+        public List<CategoryDto> Categories
         {
             get { return categories; }
             set { SetProperty(ref categories, value); }
@@ -34,19 +31,17 @@ namespace InterfaceApplication.ViewModels
 
         #endregion
 
-        private ProductIteractors PRinteractor;
-        private ApplicationDbContext dbContext;
-        public Category currentCategory;
+        private readonly CommonService<ProductDto, int> _productService= new("Product");
 
-        public ProductViewModel(ApplicationDbContext dbContext)
+        public CategoryDto currentCategory;
+
+        public ProductViewModel()
         {
             SelectedProduct = new();
-            this.dbContext = dbContext;
-            this.PRinteractor = new ProductIteractors(dbContext);
         }
 
-        private Product? Product;
-        public Product SelectedProduct
+        private ProductDto? Product;
+        public ProductDto SelectedProduct
         {
             get { return Product; }
             set
@@ -56,7 +51,7 @@ namespace InterfaceApplication.ViewModels
         }
 
         [RelayCommand]
-        private void AddProduct()
+        private async Task AddProductAsync()
         {
             if (SelectedProduct.Name.IsNullOrEmpty() ||
                 SelectedProduct.Firm.IsNullOrEmpty() ||
@@ -69,7 +64,9 @@ namespace InterfaceApplication.ViewModels
             }
 
             SelectedProduct.CategoryId = SelectedCategory.Id;
-            SelectedProduct = PRinteractor.CreateProduct(SelectedProduct);
+
+            SelectedProduct = await _productService.CreateAsync(SelectedProduct);
+
         }
     }
 }

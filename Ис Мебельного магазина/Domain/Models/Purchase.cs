@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ис_Мебельного_магазина.Domain.Models
 {
-    public class PurchaseOfGoods
+    public class Purchase
     {
         public int Id { get; set; }
         public int PurchasePrise { get; set; }

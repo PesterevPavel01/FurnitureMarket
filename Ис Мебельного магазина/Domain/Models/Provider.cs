@@ -15,6 +15,6 @@ namespace Ис_Мебельного_магазина.Domain.Models
         public string NameProvider { get; set; } = "";
         public string? additionally { get; set; }
 
-        public List<PurchaseOfGoods> purchaseOfGoods{ get; set; } = new List<PurchaseOfGoods>();
+        public List<Purchase> purchaseOfGoods{ get; set; } = new List<Purchase>();
     }
 }

@@ -4,19 +4,15 @@ using InterfaceApplication.Models.Dto;
 using InterfaceApplication.Services.Api;
 using Microsoft.IdentityModel.Tokens;
 using System.Windows;
-using Ис_Мебельного_магазина;
-using Ис_Мебельного_магазина.Domain.Models;
 
 namespace InterfaceApplication.ViewModels
 {
     public partial class AddCategoryViewModel : ObservableObject
     {
-        //private CategoryInteractor CInteractor;
-        //private ApplicationDbContext dbContext;
         private readonly CommonService<CategoryDto, int> _categoryService = new("Category");
 
-        public Category? newCategory;
-        public Category SelectedCategory
+        public CategoryDto? newCategory;
+        public CategoryDto SelectedCategory
         {
             get { return newCategory; } 
             set
@@ -27,8 +23,6 @@ namespace InterfaceApplication.ViewModels
 
         public AddCategoryViewModel()
         {
-            //this.CInteractor = new CategoryInteractor(dbContext);
-            //this.dbContext = dbContext;
             SelectedCategory = new ();
         }
 
@@ -43,7 +37,7 @@ namespace InterfaceApplication.ViewModels
 
             //SelectedCategory = CInteractor.CreateCategory(SelectedCategory); //было
 
-            var result = _categoryService.CreateAsync(new(SelectedCategory)); //стало
+            var result = _categoryService.CreateAsync(SelectedCategory); //стало
             
 
             if (result != null)

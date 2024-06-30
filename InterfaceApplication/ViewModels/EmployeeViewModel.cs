@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using InterfaceApplication.Models.Dto;
+using InterfaceApplication.Services.Api;
 using Microsoft.IdentityModel.Tokens;
 using System.Windows;
 using Ис_Мебельного_магазина;
@@ -10,12 +12,11 @@ namespace InterfaceApplication.ViewModels
 {
     public partial class EmployeeViewModel : ObservableObject
     {
+        
+        private readonly CommonService<EmployeeDto, int> _employeeService;
+        private EmployeeDto? NewEmployee;
 
-        private EmployeeInteractor Employeeinteractor;
-        private ApplicationDbContext dbContext;
-        private Employee? NewEmployee;
-
-        public Employee? SelectedEmployee
+        public EmployeeDto? SelectedEmployee
         {
             get { return NewEmployee; }
             set
@@ -25,16 +26,15 @@ namespace InterfaceApplication.ViewModels
         }
 
 
-        public EmployeeViewModel(ApplicationDbContext dbContext)
+        public EmployeeViewModel()
         {
-            this.dbContext = dbContext;
-            this.Employeeinteractor = new EmployeeInteractor(dbContext);
-            SelectedEmployee = new Employee();
+            _employeeService = new("Employee");
+            SelectedEmployee = new ();
         }
 
 
         [RelayCommand]
-        private void AddEmployee()
+        private async void AddEmployee()
         {
             if (SelectedEmployee.Login.IsNullOrEmpty() 
                 || SelectedEmployee.Password.IsNullOrEmpty()
@@ -42,7 +42,9 @@ namespace InterfaceApplication.ViewModels
                 || SelectedEmployee.Address.IsNullOrEmpty())
                 return;
 
-            SelectedEmployee=Employeeinteractor.CreateEmployee(SelectedEmployee);
+            var result = await _employeeService.CreateAsync(SelectedEmployee);
+
+
 
             if (SelectedEmployee == null)
             {
@@ -57,14 +59,15 @@ namespace InterfaceApplication.ViewModels
 
         [RelayCommand]
 
-        private void Autorization(Window autorWindow)
+        private async void Autorization(Window autorWindow)
         {
 
                 if (SelectedEmployee.Login.IsNullOrEmpty()
                     || SelectedEmployee.Password.IsNullOrEmpty())
                     return;
 
-                SelectedEmployee = Employeeinteractor.GetAll().FirstOrDefault(b => b.Login == SelectedEmployee.Login && b.Password == SelectedEmployee.Password);
+            var employees = await _employeeService.GetAllAsync();
+            SelectedEmployee = employees.FirstOrDefault(b => b.Login == SelectedEmployee.Login && b.Password == SelectedEmployee.Password);
 
             if (SelectedEmployee != null)
             {

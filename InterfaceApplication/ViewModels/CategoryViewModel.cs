@@ -1,33 +1,24 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using InterfaceApplication.Models.Dto;
+using InterfaceApplication.Services.Api;
 using InterfaceApplication.Views;
 using Microsoft.IdentityModel.Tokens;
 using System.Windows;
 using System.Windows.Controls;
-using Ис_Мебельного_магазина;
-using Ис_Мебельного_магазина.Domain.Interactors;
 using Ис_Мебельного_магазина.Domain.Models;
 
 namespace InterfaceApplication.ViewModels
 {
     public partial class CategoryViewModel : ObservableObject
     {
-        private EmployeeViewModel employeeViewModel;
-        private CategoryViewModel categoryViewModel;
-        private ProductIteractors PRinteractor;
+        private readonly EmployeeViewModel employeeViewModel;
 
-        private CategoryInteractor CInteractor;
-        private PurchaseOfGoodsIteractor PGInteractor;
-        private PurchaseOfGoodaViewModel purchaseOfGoodaView;
+        private readonly CommonService<ProductDto, int> _productService = new("Product");
+        private readonly CommonService<CategoryDto, int> _categoryService = new("Category");
 
-      
-
-
-        private readonly ApplicationDbContext dbContext;
-
-
-        public Category selectedCategory;
-        public Category SelectedCategory
+        public CategoryDto selectedCategory;
+        public CategoryDto SelectedCategory
         {
             get { return selectedCategory; }
             set
@@ -36,38 +27,36 @@ namespace InterfaceApplication.ViewModels
             }
         }
 
-        private List<Category> categories;
-        public List<Category> Categories
+        private List<CategoryDto> categories;
+        public List<CategoryDto> Categories
         {
             get { return categories; }
             set { SetProperty(ref categories, value); }
         }
 
-
-
-
         public string namecategory;
         public string description;
 
 
-        public CategoryViewModel(ApplicationDbContext dbContext)
+        public CategoryViewModel()
         {
-            this.dbContext = dbContext;
-            this.employeeViewModel = new EmployeeViewModel(this.dbContext);
+            this.employeeViewModel = new EmployeeViewModel();
 
-            this.categories = new List<Category>();
-            this.products = new List<Product>();
-            
-            this.PRinteractor = new ProductIteractors(this.dbContext);
-            this.CInteractor = new CategoryInteractor(this.dbContext);
+            this.categories = [];
+            this.products = [];
+
+
+            _productService = new("Product");
+            _categoryService = new("Category");
+
             LoadProducts();
             LoadCategories();
         }
             
         [RelayCommand]
-        private void LoadCategories()
+        private async void LoadCategories()
         {
-            Categories = CInteractor.GetAll().ToList();
+            Categories = await _categoryService.GetAllAsync();
         }
 
 
@@ -83,8 +72,8 @@ namespace InterfaceApplication.ViewModels
             LoadProducts();
         }
       
-        private PurchaseOfGoods? selectedPurchase = new();
-        public PurchaseOfGoods? SelectedPurchase
+        private Purchase? selectedPurchase = new();
+        public Purchase? SelectedPurchase
         {
             get { return selectedPurchase; }
             set
@@ -99,7 +88,7 @@ namespace InterfaceApplication.ViewModels
         private void AddCategory()
         {
             AddCategoryWindow addCategoryWindow = new AddCategoryWindow();
-            AddCategoryViewModel addcategoryViewModel=new(dbContext);
+            AddCategoryViewModel addcategoryViewModel=new();
             addCategoryWindow.DataContext = addcategoryViewModel;
             addCategoryWindow.ShowDialog();
 
@@ -114,7 +103,7 @@ namespace InterfaceApplication.ViewModels
         {
 
             AddCategoryWindow addCategoryWindow = new AddCategoryWindow();
-            AddCategoryViewModel addcategoryViewModel = new(dbContext);
+            AddCategoryViewModel addcategoryViewModel = new();
             addCategoryWindow.DataContext = addcategoryViewModel;
             addCategoryWindow.ShowDialog();
 
@@ -137,7 +126,7 @@ namespace InterfaceApplication.ViewModels
             }
 
             BasсketWindow basketWindow = new BasсketWindow();
-            BascketViewModel bascketViewModel = new(dbContext, selectedEmployee);
+            BascketViewModel bascketViewModel = new(selectedEmployee);
             basketWindow.DataContext = bascketViewModel;
             basketWindow.ShowDialog();
         }
@@ -154,7 +143,7 @@ namespace InterfaceApplication.ViewModels
             if (SelectedProduct == null) return;
 
             AddToBascketWindow basketWindow = new AddToBascketWindow();
-            AddToBascketViewModel addToBascketViewModel = new(dbContext);
+            AddToBascketViewModel addToBascketViewModel = new();
             addToBascketViewModel.SelectedProduct=SelectedProduct;
             addToBascketViewModel.CurrentEmployee = selectedEmployee;
             basketWindow.DataContext = addToBascketViewModel;
@@ -163,10 +152,10 @@ namespace InterfaceApplication.ViewModels
 
         #region ProductCatalogViewModel
 
-        private Product? NewProduct;
+        private ProductDto? NewProduct;
 
-        private Product? selectedProduct;
-        public Product? SelectedProduct
+        private ProductDto? selectedProduct;
+        public ProductDto? SelectedProduct
         {
             get { return selectedProduct; }
             set
@@ -175,24 +164,25 @@ namespace InterfaceApplication.ViewModels
             }
         }
 
-        private List<Product> products;
+        private List<ProductDto> products;
 
-        public List <Product> Products
+        public List <ProductDto> Products
         {
             get { return products; }
             set { SetProperty(ref products, value); }
         }
 
         [RelayCommand]
-        private void LoadProducts()
+        private async void LoadProducts()
         {
             if (SelectedCategory != null)
             {
-                Products = PRinteractor.GetAll().Where(p => p.CategoryId == SelectedCategory.Id).ToList();
+                Products = await _productService.GetAllAsync();
+                Products= Products.Where(p => p.CategoryId == SelectedCategory.Id).ToList();
             }
             else
             {
-                Products = PRinteractor.GetAll().ToList();
+                Products = await _productService.GetAllAsync();
             }
         }
 
@@ -200,7 +190,7 @@ namespace InterfaceApplication.ViewModels
         private void AddProduct()
         {
             AddProductWindow addProductWindow = new AddProductWindow();
-            ProductViewModel productViewModel = new ProductViewModel(dbContext);
+            ProductViewModel productViewModel = new ProductViewModel();
             addProductWindow.DataContext = productViewModel;
             productViewModel.Categories = Categories;
             productViewModel.SelectedCategory = selectedCategory;
@@ -215,15 +205,15 @@ namespace InterfaceApplication.ViewModels
         private void RemoveProduct()
         {
             if (SelectedProduct == null) return;
-            PRinteractor.RemoveProduct(SelectedProduct);
+            _productService.DeleteAsync(SelectedProduct.Id);
             LoadProducts();
         }
 
         #endregion
         #region EmployeeViewModel
 
-        private Employee? selectedEmployee;
-        public Employee? SelectedEmployee
+        private EmployeeDto? selectedEmployee;
+        public EmployeeDto? SelectedEmployee
         {
             get { return selectedEmployee; }
             set
@@ -248,7 +238,7 @@ namespace InterfaceApplication.ViewModels
         {
 
             RegistrationWindow autoRegWindow = new RegistrationWindow();
-            EmployeeViewModel employeeViewModel=new (dbContext);
+            EmployeeViewModel employeeViewModel=new ();
             autoRegWindow.DataContext = employeeViewModel;
             autoRegWindow.ShowDialog();
 
@@ -256,7 +246,7 @@ namespace InterfaceApplication.ViewModels
                 || employeeViewModel.SelectedEmployee.Address.IsNullOrEmpty())
                  return;
 
-            SelectedEmployee = new Employee()
+            SelectedEmployee = new EmployeeDto()
             {
                 NameEmployee = employeeViewModel.SelectedEmployee.NameEmployee,
                 Address = employeeViewModel.SelectedEmployee.Address,

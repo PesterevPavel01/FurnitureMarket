@@ -15,12 +15,12 @@ namespace Ис_Мебельного_магазина.Domain.Interactors
         {
             this.context = context;
         }
-        public void AddProduct(PurchaseOfGoods purchase)
+        public void AddProduct(Purchase purchase)
         {
             context.Add(purchase);
             context.SaveChanges();
         }
-        public PurchaseOfGoods CreatePurchase(PurchaseOfGoods purchase)
+        public Purchase CreatePurchase(Purchase purchase)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Ис_Мебельного_магазина.Domain.Interactors
         }
 
 
-        public void GetPurchase(PurchaseOfGoods purchase)
+        public void GetPurchase(Purchase purchase)
         {
             var s = GetPurchases(purchase);
             if (s is null)
@@ -53,19 +53,19 @@ namespace Ис_Мебельного_магазина.Domain.Interactors
 
         }
 
-        public IQueryable<PurchaseOfGoods> GetAll()
+        public IQueryable<Purchase> GetAll()
         {
-            return context.Set<PurchaseOfGoods>();
+            return context.Set<Purchase>();
         }
 
-        public PurchaseOfGoods? GetPurchases(PurchaseOfGoods purchaseId)
+        public Purchase? GetPurchases(Purchase purchaseId)
         {
             return context.purchaseOfGoods.Find(purchaseId);
         }
 
-        public List<PurchaseOfGoods> GetPurchaseOfGoods()
+        public List<Purchase> GetPurchaseOfGoods()
         {
-            IQueryable<PurchaseOfGoods> purchases = context.purchaseOfGoods;
+            IQueryable<Purchase> purchases = context.purchaseOfGoods;
 
             //categoryes = categoryes.where()
             return purchases.ToList();

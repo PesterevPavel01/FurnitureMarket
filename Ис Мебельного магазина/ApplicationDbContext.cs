@@ -9,7 +9,7 @@ namespace Ис_Мебельного_магазина
         public DbSet<Category> categories{get;set;} = null!;
         public DbSet<Employee> employees { get; set; } = null!;
         public DbSet<Provider> providers{ get; set; } = null!;
-        public DbSet<PurchaseOfGoods> purchaseOfGoods{ get; set; } = null!;
+        public DbSet<Purchase> purchaseOfGoods{ get; set; } = null!;
         public DbSet<Product> products { get; set; } = null!;
         public DbSet<Bascket> basckets { get; set; } = null!;
 

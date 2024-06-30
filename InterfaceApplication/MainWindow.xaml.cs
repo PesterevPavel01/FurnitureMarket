@@ -15,16 +15,12 @@ namespace InterfaceApplication
     {
         public CategoryViewModel categoryviewmodel { get; private set; }
 
-        public MainWindow(ApplicationDbContext dbcontext)
+        public MainWindow()
         {   
 
             categoryviewmodel = App.HostContainer.Services.GetRequiredService<CategoryViewModel>();
 
             DataContext = categoryviewmodel;
-
-            EmployeeInteractor Employeeinteractor = new EmployeeInteractor(dbcontext);
-
-            var SelectedEmployee = Employeeinteractor.GetAll();
 
             InitializeComponent();
             

@@ -1,28 +1,24 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using InterfaceApplication.Models;
+using InterfaceApplication.Models.Dto;
+using InterfaceApplication.Services.Api;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic.ApplicationServices;
 using System.Windows;
 using Ис_Мебельного_магазина;
-using Ис_Мебельного_магазина.Domain.Interactors;
 using Ис_Мебельного_магазина.Domain.Models;
 
 namespace InterfaceApplication.ViewModels
 {
     public partial class BascketViewModel : ObservableObject
     {
-        private ApplicationDbContext dbContext;
-        private EmployeeInteractor employeeInterator;
-        private BascketInteractor bascketInterator;
-        private ProductIteractors productInterator;
+        private readonly BascketService _bascketService;
+        private readonly CommonService<ProductDto, int> _productService;
 
-        public BascketViewModel(ApplicationDbContext dbContext,Employee currentEmployee)
+        public BascketViewModel(EmployeeDto currentEmployee)
         {
-            this.dbContext = dbContext;
-            bascketInterator = new(dbContext);
-            productInterator = new(dbContext);
-            employeeInterator= new(dbContext);
+            _bascketService = new ("Bascket");
+            _productService = new("Product");
             this.currentEmployee = currentEmployee;
             Load();
         }
@@ -36,8 +32,8 @@ namespace InterfaceApplication.ViewModels
             set { SetProperty(ref items, value); }
         }
 
-        private Employee? currentEmployee;
-        public Employee? CurrentEmployee
+        private EmployeeDto? currentEmployee;
+        public EmployeeDto? CurrentEmployee
         {
             get { return currentEmployee; }
             set
@@ -46,10 +42,11 @@ namespace InterfaceApplication.ViewModels
             }
         }
 
-        private void Load() {
+        private async void Load() {
 
-            var basckets=bascketInterator.GetAll().Where(p => p.EmployeeId == currentEmployee.Id).ToList();
-            var products=productInterator.GetAll().ToList();
+            var basckets = await _bascketService.GetAllAsync();
+            basckets= basckets.Where(p => p.EmployeeId == currentEmployee.Id).ToList();
+            var products= await _productService.GetAllAsync();
 
             try
             {
@@ -70,9 +67,9 @@ namespace InterfaceApplication.ViewModels
 
         [RelayCommand]
 
-        private void Clear()
+        private async void  Clear()
         {
-            var basckets = bascketInterator.GetAll().Where(p => p.EmployeeId == currentEmployee.Id).ExecuteDeleteAsync();
+            var basckets = await _bascketService.DeleteEmployeeEntitys(currentEmployee.Id);
             Items = new();
         }
 

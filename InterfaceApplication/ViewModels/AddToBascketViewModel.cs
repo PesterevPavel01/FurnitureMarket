@@ -1,21 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using InterfaceApplication.Models.Dto;
+using InterfaceApplication.Services.Api;
 using System.Windows;
 using System.Windows.Controls;
-using Ис_Мебельного_магазина;
-using Ис_Мебельного_магазина.Domain.Interactors;
 using Ис_Мебельного_магазина.Domain.Models;
 
 namespace InterfaceApplication.ViewModels
 {
     public partial class AddToBascketViewModel : ObservableObject
     {
-        private ApplicationDbContext dbContext;
-        private BascketInteractor bascketInterator;
-        public AddToBascketViewModel(ApplicationDbContext dbContext)
-        { 
-            this.dbContext = dbContext;
-            bascketInterator = new(dbContext);
+        private readonly CommonService<BascketDto, int> _bascketService;
+
+        public AddToBascketViewModel()
+        {
+            _bascketService = new("Bascket");
         }
 
         private string number;
@@ -33,8 +32,8 @@ namespace InterfaceApplication.ViewModels
             set { SetProperty(ref number, value); }
         }
 
-        private Employee? currentEmployee;
-        public Employee? CurrentEmployee
+        private EmployeeDto? currentEmployee;
+        public EmployeeDto? CurrentEmployee
         {
             get { return currentEmployee; }
             set
@@ -43,8 +42,8 @@ namespace InterfaceApplication.ViewModels
             }
         }
 
-        private Product? selectedProduct;
-        public Product? SelectedProduct
+        private ProductDto? selectedProduct;
+        public ProductDto? SelectedProduct
         {
             get { return selectedProduct; }
             set
@@ -70,8 +69,8 @@ namespace InterfaceApplication.ViewModels
                 return;
             }
 
-            var result=bascketInterator.AddBascket(
-                new Bascket {
+            var result= _bascketService.CreateAsync(
+                new BascketDto {
                     EmployeeId=currentEmployee.Id,
                     Number= value,
                     ProductId=SelectedProduct.Id,
