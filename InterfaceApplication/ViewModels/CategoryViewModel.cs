@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ExcellReports;
 using InterfaceApplication.Models.Dto;
 using InterfaceApplication.Services.Api;
 using InterfaceApplication.Views;
 using Microsoft.IdentityModel.Tokens;
+using System.Drawing.Drawing2D;
 using System.Windows;
 using System.Windows.Controls;
 using Ис_Мебельного_магазина.Domain.Models;
@@ -152,8 +154,6 @@ namespace InterfaceApplication.ViewModels
 
         #region ProductCatalogViewModel
 
-        private ProductDto? NewProduct;
-
         private ProductDto? selectedProduct;
         public ProductDto? SelectedProduct
         {
@@ -201,6 +201,7 @@ namespace InterfaceApplication.ViewModels
 
             LoadProducts();           
         }
+
         [RelayCommand]
         private void RemoveProduct()
         {
@@ -221,6 +222,7 @@ namespace InterfaceApplication.ViewModels
                 SetProperty(ref selectedEmployee, value);
             }
         }
+
 
         [RelayCommand]
         private void AddEmployees()
@@ -264,5 +266,29 @@ namespace InterfaceApplication.ViewModels
             }
         }
         #endregion
+
+        [RelayCommand]
+
+        private async Task CreatePriceListAsync()
+        {
+            //string baseDir = Environment.CurrentDirectory;
+            Price_list price_list=new();
+
+            var products = await _productService.GetAllAsync();
+
+            string[,] data = new string[products.Count,2];
+
+            int row = 0;
+
+            foreach (var product in products)
+            {
+                data[row, 0] = product.Name;
+                data[row, 1] = product.Price;
+                row++;
+            }
+
+            price_list.CreateExcellDocument("B:\\Яндекс\\Саня\\Template.xlsx", data,"priceList");
+
+        }
     }
 }

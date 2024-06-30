@@ -134,7 +134,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="3"  Margin="7,54,50,315">
-            <Button Command="{Binding AddToBascketCommand}"  Content="опись товаров"  Width="145" Height="44"   Background="#FFF9CC59" >
+            <Button Command="{Binding CreatePriceListCommand}"  Content="опись товаров"  Width="145" Height="44"   Background="#FFF9CC59" >
 
             </Button>
         </StackPanel>

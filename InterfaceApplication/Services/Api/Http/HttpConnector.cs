@@ -7,7 +7,7 @@ namespace InterfaceApplication.Services.Api
 {
     public class HttpConnector
     {
-        private const string Host = "https://localhost:7104/api/";
+        private const string Host = "http://localhost:5254/api/";
 
         public Task<string> GetDataByUrl(string url)
         {

@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExcellReports\ExcellReports.csproj" />
     <ProjectReference Include="..\Ис Мебельного магазина\ISFurnitureMagasine.csproj" />
   </ItemGroup>
 
