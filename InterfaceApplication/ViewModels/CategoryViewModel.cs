@@ -5,7 +5,6 @@ using InterfaceApplication.Models.Dto;
 using InterfaceApplication.Services.Api;
 using InterfaceApplication.Views;
 using Microsoft.IdentityModel.Tokens;
-using System.Drawing.Drawing2D;
 using System.Windows;
 using System.Windows.Controls;
 using Ис_Мебельного_магазина.Domain.Models;
@@ -14,6 +13,7 @@ namespace InterfaceApplication.ViewModels
 {
     public partial class CategoryViewModel : ObservableObject
     {
+
         private readonly EmployeeViewModel employeeViewModel;
 
         private readonly CommonService<ProductDto, int> _productService = new("Product");
@@ -123,7 +123,7 @@ namespace InterfaceApplication.ViewModels
         {
             if (SelectedEmployee == null)
             {
-                MessageBox.Show("Необходимо авторизоваться", "Предупреждение");
+                System.Windows.MessageBox.Show("Необходимо авторизоваться", "Предупреждение");
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace InterfaceApplication.ViewModels
         private void AddToBascket()
         {
             if (SelectedEmployee == null) {
-                MessageBox.Show("Необходимо авторизоваться", "Предупреждение");
+                System.Windows.MessageBox.Show("Необходимо авторизоваться", "Предупреждение");
                 return;
             }
             if (SelectedProduct == null) return;
@@ -266,29 +266,5 @@ namespace InterfaceApplication.ViewModels
             }
         }
         #endregion
-
-        [RelayCommand]
-
-        private async Task CreatePriceListAsync()
-        {
-            //string baseDir = Environment.CurrentDirectory;
-            Price_list price_list=new();
-
-            var products = await _productService.GetAllAsync();
-
-            string[,] data = new string[products.Count,2];
-
-            int row = 0;
-
-            foreach (var product in products)
-            {
-                data[row, 0] = product.Name;
-                data[row, 1] = product.Price;
-                row++;
-            }
-
-            price_list.CreateExcellDocument("B:\\Яндекс\\Саня\\Template.xlsx", data,"priceList");
-
-        }
     }
 }

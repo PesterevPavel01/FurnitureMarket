@@ -134,7 +134,10 @@
         </StackPanel>
 
         <StackPanel Grid.Column="3"  Margin="7,54,50,315">
-            <Button Command="{Binding CreatePriceListCommand}"  Content="опись товаров"  Width="145" Height="44"   Background="#FFF9CC59" >
+            <Button 
+                x:Name="CreatePriceList"
+                Command="{Binding CreatePriceListCommand}"
+                CommandParameter="{Binding ElementName=CreatePriceList}" Content="опись товаров"  Width="145" Height="44"   Background="#FFF9CC59" Click="CreatePriceList_Click" >
 
             </Button>
         </StackPanel>
